@@ -179,12 +179,7 @@ async def on_command_error(ctx, error):
             await ctx.reinvoke()
             return
         else:
-            msg = await ctx.send(
-                f"{ctx.author.mention}, please slow down! The command `{BOT_PREFIX}{ctx.command}` has "
-                f"{round(error.retry_after, 1)}s left of cooldown.")
-            # await asyncio.sleep(5)
-            # await msg.delete()
-            # await ctx.message.delete()
+            await ctx.message.add_reaction('\N{CROSS MARK}')
             return
 
     print(''.join(traceback.format_exception(type(error), error, error.__traceback__)))
@@ -367,21 +362,20 @@ async def blurplefy(ctx, arg1=None):
 
     try:
         embed = discord.Embed(Title="", colour=0x7289DA)
-        embed.set_author(name="Blurplefier - makes your image blurple!")
+        embed.set_author(name="Blurplefier")
         if len(frames) == 1:
             embed.set_image(url="attachment://blurple.png")
             embed.set_footer(
                 text=f"Please note - This blurplefier is automated and therefore may not always give you the best "
-                     f"result. | Content requested by {ctx.author}")
+                     f"result.")
         else:
             embed.set_image(url="attachment://blurple.gif")
             embed.set_footer(
                 text=f"Please note - This blurplefier is automated and therefore may not always give you the best "
                      f"result. Disclaimer: This image is a gif, and the quality does not always turn out great. "
-                     f"HOWEVER, the gif is quite often not as grainy as it appears in the preview | Content "
-                     f"requested by {ctx.author}")
+                     f"HOWEVER, the gif is quite often not as grainy as it appears in the preview.")
         embed.set_thumbnail(url=url)
-        await ctx.send(embed=embed, file=image)
+        await ctx.send(content="{ctx.author.mention}: your image is below!", embed=embed, file=image)
     except discord.errors.DiscordException:
         await ctx.send(
             f"{ctx.author.mention}, whoops! It looks like this image is too big to upload. If you want, you can "
